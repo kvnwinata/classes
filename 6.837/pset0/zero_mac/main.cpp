@@ -141,8 +141,18 @@ void drawScene(void)
 
 	// This GLUT method draws a teapot.  You should replace
 	// it with code which draws the object you loaded.
-	glutSolidTeapot(1.0);
+	//glutSolidTeapot(1.0);
     
+    for(unsigned int i=0; i < vecf.size(); i++) {
+        glBegin(GL_TRIANGLES);
+        glNormal3d(vecn[vecf[i][2]-1][0], vecn[vecf[i][2]-1][1], vecn[vecf[i][2]-1][2]);
+        glVertex3d(vecv[vecf[i][0]-1][0], vecv[vecf[i][0]-1][1], vecv[vecf[i][0]-1][2]);
+        glNormal3d(vecn[vecf[i][5]-1][0], vecn[vecf[i][5]-1][1], vecn[vecf[i][5]-1][2]);
+        glVertex3d(vecv[vecf[i][3]-1][0], vecv[vecf[i][3]-1][1], vecv[vecf[i][3]-1][2]);
+        glNormal3d(vecn[vecf[i][8]-1][0], vecn[vecf[i][8]-1][1], vecn[vecf[i][8]-1][2]);
+        glVertex3d(vecv[vecf[i][6]-1][0], vecv[vecf[i][6]-1][1], vecv[vecf[i][6]-1][2]);
+        glEnd();
+    }
     // Dump the image to the screen.
     glutSwapBuffers();
 
@@ -178,6 +188,42 @@ void reshapeFunc(int w, int h)
 void loadInput()
 {
 	// load the OBJ file here
+    int MAX_BUFFER_SIZE = 100;
+    char buffer[MAX_BUFFER_SIZE];
+    //if ();
+    while (cin.getline(buffer, MAX_BUFFER_SIZE) != 0){
+        stringstream ss(buffer);
+        string s;
+        ss >> s;
+        if (s == "v") {
+            Vector3f v;
+            ss >> v[0] >> v[1] >> v[2];
+            vecv.push_back(v);
+        } else if (s == "vn"){
+            Vector3f vn;
+            ss >> vn[0] >> vn[1] >> vn[2];
+            vecn.push_back(vn);
+        } else if (s == "f"){
+            unsigned a,b,c,d,e,f,g,h,i;
+            char x;
+            ss >> a >> x >> b >> x >> c >>
+                  d >> x >> e >> x >> f >>
+                  g >> x >> h >> x >> i;
+            vector<unsigned> face;
+            face.push_back(a);
+            face.push_back(b);
+            face.push_back(c);
+            face.push_back(d);
+            face.push_back(e);
+            face.push_back(f);
+            face.push_back(g);
+            face.push_back(h);
+            face.push_back(i);
+            vecf.push_back(face);
+        } else {
+            // ignore other type of lines
+        }
+    }
 }
 
 // Main routine.
